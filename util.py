@@ -743,7 +743,17 @@ class PriorityQueue:
         # If item already in priority queue with equal or lower priority, do nothing.
         # If item not in priority queue, do the same thing as self.push.
 
-        "*** YOUR CODE HERE ***"
+        for entry in self.heap:
+            entry_priority = entry[0]
+            entry_count = entry[1]
+            entry_item = entry[2]
+            if entry_item == item:
+                if entry_priority > priority:
+                    self.heap.remove(entry)
+                    self.count -= 1
+                    self.push(item, priority)
+                return
+        self.push(item, priority)
 
 
 class PriorityQueueWithFunction(PriorityQueue):

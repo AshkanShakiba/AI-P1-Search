@@ -573,9 +573,9 @@ def foodHeuristic(state, problem):
         walls = problem.walls
         positions = walls.asList(False)
 
-        for position in positions:
+        for p in positions:
             for food in food_list:
-                problem.heuristicInfo[(position, food)] = mazeDistance(position, food, game_state)
+                problem.heuristicInfo[(p, food)] = mazeDistance(p, food, game_state)
 
     furthest_food_distance = 0
 

@@ -333,22 +333,24 @@ class CornersProblem(search.SearchProblem):
         self._expanded = 0  # DO NOT CHANGE; Number of search nodes expanded
         # Please add any code here which you would like to use
         # in initializing the problem
-        "*** YOUR CODE HERE ***"
+        self.costFn = lambda x: 1
 
     def getStartState(self):
         """
         Returns the start state (in your state space, not the full Pacman state
         space)
         """
-        "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        return self.startingPosition, set()
 
     def isGoalState(self, state):
         """
         Returns whether this search state is a goal state of the problem.
         """
-        "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        position, visited_corners = state
+        if position in visited_corners:
+            return len(self.corners) == len(visited_corners)
+        else:
+            return False
 
     def getSuccessors(self, state):
         """
@@ -375,7 +377,22 @@ class CornersProblem(search.SearchProblem):
             #   nextx, nexty = int(x + dx), int(y + dy)
             #   hitsWall = self.walls[nextx][nexty]
 
-            "*** YOUR CODE HERE ***"
+            current_position, visited_corners = state
+            x, y = current_position
+            dx, dy = Actions.directionToVector(action)
+            next_x, next_y = int(x + dx), int(y + dy)
+            hits_wall = self.walls[next_x][next_y]
+
+            if not hits_wall:
+                next_position = (next_x, next_y)
+                next_visited_corners = set(visited_corners)
+
+                if next_position in self.corners and next_position not in visited_corners:
+                    next_visited_corners.add(next_position)
+
+                next_state = (next_position, next_visited_corners)
+                cost = self.costFn(next_position)
+                successors.append((next_state, action, cost))
 
         self._expanded += 1  # DO NOT CHANGE
         return successors

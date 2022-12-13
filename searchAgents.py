@@ -566,8 +566,24 @@ def foodHeuristic(state, problem):
     problem.heuristicInfo['wallCount']
     """
     position, foodGrid = state
-    "*** YOUR CODE HERE ***"
-    return 0
+    food_list = foodGrid.asList()
+
+    if not problem._expanded:
+        game_state = problem.startingGameState
+        walls = problem.walls
+        positions = walls.asList(False)
+
+        for position in positions:
+            for food in food_list:
+                problem.heuristicInfo[(position, food)] = mazeDistance(position, food, game_state)
+
+    furthest_food_distance = 0
+
+    for food in food_list:
+        food_distance = problem.heuristicInfo[(position, food)]
+        furthest_food_distance = max(furthest_food_distance, food_distance)
+
+    return furthest_food_distance
 
 
 class ClosestDotSearchAgent(SearchAgent):
